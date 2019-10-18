@@ -50,6 +50,8 @@ app.use('/', require('./routes/auth.routes'));
 app.listen(PORT, function () {
     console.log("Server should be running on Port: " + PORT);
 });
+
+app.use(express.static(path.join(__dirname, "/client/build")));
 app.use((req, res) => {
   // If no routes match, send them the React HTML.
   res.sendFile(__dirname + "/typescript-redux-react-frontend/build/index.html");
