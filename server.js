@@ -6,7 +6,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const PORT = 8080;
+const PORT = "https://patricks-boilerplate.herokuapp.com/";//8080
 const session        = require("express-session");
 const MongoStore     = require("connect-mongo")(session);
 const logger         = require("morgan");
@@ -24,7 +24,7 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 //we connect the mongoose object to the MongoDB database "assets" that will store and deliver our asset data
 
-mongoose.connect('mongodb://127.0.0.1:27017/assets', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI||'mongodb://127.0.0.1:27017/assets', { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', function () {
@@ -49,4 +49,8 @@ app.use('/', require('./routes/auth.routes'));
 
 app.listen(PORT, function () {
     console.log("Server should be running on Port: " + PORT);
+});
+app.use((req, res) => {
+  // If no routes match, send them the React HTML.
+  res.sendFile(__dirname + "/typescript-redux-react-frontend/build/index.html");
 });
